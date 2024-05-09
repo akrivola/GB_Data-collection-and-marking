@@ -38,7 +38,6 @@ import json
 from pybit.unified_trading import HTTP
 import pandas as pd
 
-symbol = 'BTCUSDT'
 interval = 60
 start = str(int(dt.datetime(2024,1,1).timestamp()*1000))
 end = str(int(dt.datetime(2024,5,9).timestamp()*1000))
