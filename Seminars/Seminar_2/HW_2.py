@@ -1,8 +1,21 @@
+'''
+Урок 2. Парсинг HTML. BeautifulSoup
+Выполнить скрейпинг данных в веб-сайта http://books.toscrape.com/ и извлечь информацию о всех книгах на сайте во всех
+категориях: название, цену, количество товара в наличии (In stock (19 available)) в формате integer, описание.
+
+Программа записывает результат в books_toscrape.log
+Данные - в books_toscrape_data.json
+'''
+
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 from pprint import pprint
 import re
+import json
+import logging
+
+logging.basicConfig(filename='books_toscrape.log', level=logging.INFO)
 
 # https://books.toscrape.com/catalogue/page-1.html
 url = "https://books.toscrape.com/catalogue/"
@@ -14,7 +27,7 @@ headers = {
 session = requests.session()
 
 all_books = []
-page = 49
+page = 1
 
 while True:
     response = session.get(direct_url + str(page) + '.html', headers=headers)
@@ -51,12 +64,21 @@ while True:
             description = soup_inner.find('article', {'class': 'product_page'}).find('p', {'class': ''}).getText()
         except:
             print(f'No description for book {title}')
+            logging.info(f'No description for book {title}')
             description = ''
 
         book_info['description'] = description
 
         all_books.append(book_info)
     print(f'Page {page} parced successfully')
+    logging.info(f'Page {page} parced successfully')
+
     page += 1
 
-pprint(all_books)
+with open('books_toscrape_data.json', 'w') as f:
+    json.dump(all_books, f)
+
+import pandas as pd
+
+df = pd.DataFrame(all_books)
+print(df)
