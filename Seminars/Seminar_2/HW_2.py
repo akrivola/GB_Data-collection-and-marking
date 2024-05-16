@@ -28,7 +28,7 @@ headers = {
 session = requests.session()
 
 all_books = []
-page = 1
+page = 50
 
 while True:
     response = session.get(direct_url + str(page) + '.html', headers=headers)
