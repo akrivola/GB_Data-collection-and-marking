@@ -28,7 +28,7 @@ headers = {
 session = requests.session()
 
 all_books = []
-page = 50
+page = 1
 
 while True:
     response = session.get(direct_url + str(page) + '.html', headers=headers)
@@ -48,7 +48,7 @@ while True:
         book_info['title'] = title
 
         price = book.find('p', {'class': 'price_color'}).getText()[1:]
-        book_info['price'] = price
+        book_info['price'] = float(price[1:])
 
         response_inner = session.get(link, headers=headers)
         soup_inner = BeautifulSoup(response_inner.text, "html.parser")
@@ -82,4 +82,4 @@ with open('books_toscrape_data.json', 'w') as f:
 import pandas as pd
 
 df = pd.DataFrame(all_books)
-print(df)
+print(df[['title', 'price', 'quantity']])

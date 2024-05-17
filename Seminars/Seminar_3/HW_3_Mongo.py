@@ -7,7 +7,7 @@
 import json
 from pymongo import MongoClient
 import os
-from pprint import pprint
+import pandas as pd
 
 
 
@@ -29,16 +29,32 @@ with open(json_file_path) as file:
 # Выгрузка данных в MongoDB
 collection.insert_many(data)
 
-# 1. Запрос для извлечения всех товаров из коллекции:
+# 1. Запрос для извлечения всех книг из коллекции:
 
-# result = collection.find({})
-# for document in result:
-#     pprint(document)
+print('***** Всех книги из коллекции:')
+result = collection.find({})
+df = pd.DataFrame(result)
+print(df[['title', 'price', 'quantity']])
 
-# 3. Запрос для извлечения товаров с количеством больше 10 единиц в наличии:
+# 2. Запрос для извлечения книг с ценой меньше 50:
 
-result = collection.find({"quantity": {"$gt": 20}})
-for document in result:
-    print(document)
+print('***** Книги с ценой меньше 20:')
+result = collection.find({"price": {"$lt": 20}})
+df = pd.DataFrame(result)
+print(df[['title', 'price', 'quantity']])
+
+# 3. Запрос для извлечения книг с количеством больше 10 единиц в наличии:
+
+print('***** Книги с количеством больше 10 единиц в наличии:')
+result = collection.find({"quantity": {"$gt": 10}})
+df = pd.DataFrame(result)
+print(df[['title', 'price', 'quantity']])
+
+# 4. Запрос для извлечения книг с названием, содержащим слово "Alice":
+
+print('***** Книги с названием, содержащим слово "Alice":')
+result = collection.find({"title": {"$regex": "Alice"}})
+df = pd.DataFrame(result)
+print(df[['title', 'price', 'quantity']])
 
 client.close()
