@@ -9,8 +9,6 @@ from pymongo import MongoClient
 import os
 import pandas as pd
 
-
-
 # Подключение к MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 db = client["mydatabase"]
@@ -20,7 +18,8 @@ collection = db["mycollection"]
 collection.delete_many({})
 
 # Определение пути к файлу JSON
-json_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'Seminar_2\\books_toscrape_data.json')
+json_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                              'Seminar_2\\books_toscrape_data.json')
 
 # Загрузка данных из файла JSON
 with open(json_file_path) as file:
